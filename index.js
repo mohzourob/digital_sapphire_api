@@ -15,6 +15,7 @@ import checkOrigin from "./middleware/cors.js";
 
 
 // import routes
+import Users from "./routes/Users.js"
 
 // import middlewaresdigdi
 import {
@@ -74,6 +75,7 @@ app.use(checkOrigin())
 // check ip
 
 // routes
+app.use("/api/v1/users", Users);
 
 // routes not founds
 app.use(() => {
