@@ -8,6 +8,11 @@ const User = mongoose.Schema({
         required: true,
         trim: true,
 
+    },
+    nonceCode: {
+        type: String,
+        required: true,
+        trim: true,
     }
 }, {
     timestamps: true
