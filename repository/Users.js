@@ -8,7 +8,7 @@ export const getUser = async (filter) => {
         const user = await User.findOne(filter);
         return user;
     } catch (err) {
-        console.log(err)
+        throw err;
     }
 }
 
@@ -17,8 +17,7 @@ export const createUser = async (user) => {
     try {
         await User.create(user);
     } catch (err) {
-        console.log(err)
-
+        throw err;
     }
 }
 
@@ -27,6 +26,6 @@ export const updateUser = (filter, newData) => {
     try {
         return User.updateOne(filter, newData, { upsert: true });
     } catch (err) {
-        console.log(err)
+        throw err;
     }
 }

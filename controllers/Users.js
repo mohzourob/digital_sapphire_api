@@ -6,10 +6,9 @@ import logger from "../utils/logger.js";
 
 
 export const generateNonceCodeForAuthentication = async (req, res, next) => {
+    let { body: { walletPublicAddress } } = req;
+    walletPublicAddress = walletPublicAddress.toLowerCase();
     try {
-        let { body: { walletPublicAddress } } = req;
-        walletPublicAddress = walletPublicAddress.toLowerCase();
-
         logger.info(`Creating nonce code for authentication ${walletPublicAddress} address`);
         const nonceCode = await userServices.generateNonceCodeForAuthentication(walletPublicAddress);
         logger.info(`Nonce code for authentication created: ${nonceCode}`);
@@ -27,20 +26,21 @@ export const generateNonceCodeForAuthentication = async (req, res, next) => {
 
 
 export const authenticationWithSignature = async (req, res, next) => {
+    let { body: { signature, walletPublicAddress } } = req;
+    walletPublicAddress = walletPublicAddress.toLowerCase();
     try {
-        let { body: { signature, walletPublicAddress } } = req;
-        walletPublicAddress = walletPublicAddress.toLowerCase();
 
-        logger.info(`Checking authentication signature`);
+        logger.info(`Starting authentication process for ${walletPublicAddress} address`);
+        const userToken = await userServices.checkAuthenticationSignature(signature, walletPublicAddress);
 
-        const isAuthenticated = await userServices.checkAuthenticationSignature(signature, walletPublicAddress);
-
-        logger.info(`Authentication signature checked: ${isAuthenticated}`);
+        logger.info(`Token sent successfully for ${walletPublicAddress} address`);
         res.status(200).json({
-            isAuthenticated: isAuthenticated
+            isAuthenticated: true,
+            token: userToken
         })
     } catch (err) {
-        logger.error(`Check authentication signature failed.`)
+        console.log("here")
+        logger.error(`Authentication process failed for ${walletPublicAddress} address.`)
         if (err.name === "HttpError") {
             next(err);
         }
