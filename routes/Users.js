@@ -2,8 +2,14 @@ import { Router } from "express";
 import { check } from "express-validator";
 import {
     generateNonceCodeForAuthentication,
-    authenticationWithSignature
+    authenticationWithSignature,
+    updateBannerImage,
+    updateCoverImage,
+    updateProfile,
 } from "../controllers/Users.js";
+import {
+    protect
+} from "../middleware/authCheck.js";
 
 
 const router = Router();
@@ -16,5 +22,9 @@ router.post("/login", [
     check("signature").isLength({ min: 20 }),
     check("walletPublicAddress").isLength({ min: 42, max: 42 })
 ], authenticationWithSignature)
+
+router.put("/profile/banner", protect, updateBannerImage)
+router.put("/profile/cover", protect, updateCoverImage)
+router.put("/profile", protect, updateProfile)
 
 export default router;

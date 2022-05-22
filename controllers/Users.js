@@ -58,8 +58,41 @@ export const authenticationWithSignature = async (req, res, next) => {
             token: userToken
         })
     } catch (err) {
-        console.log("here")
         logger.error(`Authentication process failed for ${walletPublicAddress} address.`)
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}
+
+
+export const updateBannerImage = async (req, res, next) => {
+    try {
+
+    } catch (err) {
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}
+
+export const updateCoverImage = async (req, res, next) => {
+    try {
+
+    } catch (err) {
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}
+
+export const updateProfile = async (req, res, next) => {
+    try {
+
+    } catch (err) {
         if (err.name === "HttpError") {
             next(err);
         }

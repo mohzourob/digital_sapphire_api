@@ -16,11 +16,15 @@ const accountSchema = mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     isDeleted: {
         type: Boolean,
         default: false,
+    },
+    profile: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Profile'
     }
 }, {
     timestamps: true
@@ -31,11 +35,3 @@ const accountSchema = mongoose.Schema({
 
 
 export default mongoose.model("Account", accountSchema);
-
-
-/**
- *     profile: {
-        type: Schema.ObjectId,
-        ref: 'Profile'
-    }
- */
