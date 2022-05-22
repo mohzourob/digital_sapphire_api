@@ -13,7 +13,12 @@ export const generateNonceCodeForAuthentication = async (walletPublicAddress) =>
 
         // update user nonce code and create if not found
         logger.info(`Creating new nonce code for authentication ${walletPublicAddress} address, and add address as new user if not found`);
-        await userRepository.updateUser({ walletPublicAddress }, { nonceCode: code });
+        const user = await userRepository.getUser({ walletPublicAddress });
+        if (!user) {
+            await userRepository.createUser({ walletPublicAddress, nonceCode: code });
+        } else {
+            await userRepository.updateUser({ walletPublicAddress }, { nonceCode: code });
+        }
 
         return code;
     } catch (err) {

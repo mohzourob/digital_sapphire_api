@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import * as userServices from "../services/Users.js";
+import { ethers } from 'ethers';
 
 import HttpError from "../models/HttpError.js";
 import logger from "../utils/logger.js";
@@ -9,6 +10,16 @@ export const generateNonceCodeForAuthentication = async (req, res, next) => {
     let { body: { walletPublicAddress } } = req;
     walletPublicAddress = walletPublicAddress.toLowerCase();
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
+        }
+
+        const isValidAddress = ethers.utils.isAddress(walletPublicAddress);
+        if (!isValidAddress) {
+            return next(new HttpError(`Invalid Address`, 400))
+        }
+
         logger.info(`Creating nonce code for authentication ${walletPublicAddress} address`);
         const nonceCode = await userServices.generateNonceCodeForAuthentication(walletPublicAddress);
         logger.info(`Nonce code for authentication created: ${nonceCode}`);
@@ -29,13 +40,21 @@ export const authenticationWithSignature = async (req, res, next) => {
     let { body: { signature, walletPublicAddress } } = req;
     walletPublicAddress = walletPublicAddress.toLowerCase();
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
+        }
+
+        const isValidAddress = ethers.utils.isAddress(walletPublicAddress);
+        if (!isValidAddress) {
+            return next(new HttpError(`Invalid Address`, 400))
+        }
 
         logger.info(`Starting authentication process for ${walletPublicAddress} address`);
         const userToken = await userServices.checkAuthenticationSignature(signature, walletPublicAddress);
 
         logger.info(`Token sent successfully for ${walletPublicAddress} address`);
         res.status(200).json({
-            isAuthenticated: true,
             token: userToken
         })
     } catch (err) {

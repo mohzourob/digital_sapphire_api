@@ -8,7 +8,13 @@ import {
 
 const router = Router();
 
-router.post("/nonceCode", generateNonceCodeForAuthentication)
-router.post("/login", authenticationWithSignature)
+router.post("/nonceCode", [
+    check("walletPublicAddress").isLength({ min: 42, max: 42 })
+],
+    generateNonceCodeForAuthentication)
+router.post("/login", [
+    check("signature").isLength({ min: 20 }),
+    check("walletPublicAddress").isLength({ min: 42, max: 42 })
+], authenticationWithSignature)
 
 export default router;
