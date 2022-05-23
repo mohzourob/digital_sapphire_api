@@ -70,6 +70,11 @@ export const authenticationWithSignature = async (req, res, next) => {
 export const updateBannerImage = async (req, res, next) => {
     try {
 
+        console.log(req.file)
+
+
+        res.status(200).send({})
+
     } catch (err) {
         if (err.name === "HttpError") {
             next(err);

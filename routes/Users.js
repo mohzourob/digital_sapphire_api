@@ -10,6 +10,7 @@ import {
 import {
     protect
 } from "../middleware/authCheck.js";
+import uploader from "../middleware/fileUploader.js"
 
 
 const router = Router();
@@ -23,7 +24,7 @@ router.post("/login", [
     check("walletPublicAddress").isLength({ min: 42, max: 42 })
 ], authenticationWithSignature)
 
-router.put("/profile/banner", protect, updateBannerImage)
+router.put("/profile/banner", protect, uploader.single('banner'), updateBannerImage)
 router.put("/profile/cover", protect, updateCoverImage)
 router.put("/profile", protect, updateProfile)
 
