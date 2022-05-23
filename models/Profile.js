@@ -5,18 +5,22 @@ const profileSchema = mongoose.Schema({
     firstName: {
         type: String,
         trim: true,
+        default: "",
     },
     lastName: {
         type: String,
         trim: true,
+        default: "",
     },
     bannerImage: {
-        type: String,
-        trim: true,
+        type: mongoose.Schema.ObjectId,
+        ref: 'AccountResource',
+        default: null
     },
     coverImage: {
-        type: String,
-        trim: true,
+        type: mongoose.Schema.ObjectId,
+        ref: 'AccountResource',
+        default: null
     },
     username: {
         type: String,
@@ -29,32 +33,42 @@ const profileSchema = mongoose.Schema({
     bio: {
         type: String,
         trim: true,
+        default: "",
     },
     links: {
         facebook: {
             type: String,
             trim: true,
+            default: "",
         },
         instagram: {
             type: String,
             trim: true,
+            default: "",
+
         },
         twitter: {
             type: String,
             trim: true,
+            default: "",
+
         },
         discord: {
             type: String,
             trim: true,
+            default: "",
+
         },
         website: {
             type: String,
             trim: true,
+            default: "",
         }
     },
     account: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Account'
+        ref: 'Account',
+        require: true
     }
 }, {
     timestamps: true

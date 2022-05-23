@@ -14,7 +14,7 @@ export const protect = async (req, res, next) => {
     try {
         // Verify token
         const decoded = jwt.verify(req.headers.authorization, process.env.JWT_ACCESS_TOKEN_SECRET);
-        console.log(decoded);
+        logger.info(`Token verified successfully`);
         const userDetails = await Account.findById(decoded._id);
 
         if (!userDetails) {

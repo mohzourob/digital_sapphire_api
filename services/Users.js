@@ -61,3 +61,26 @@ export const checkAuthenticationSignature = async (signature, walletPublicAddres
         throw err;
     }
 }
+
+
+export const updateUserBanner = async (user, file) => {
+    try {
+        if (!file.mimetype.includes("image")) {
+            throw new HttpError(`Invalid file type`, 400);
+        }
+        const fileDetails = {
+            name: file.originalname,
+            encoding: file.encoding,
+            mimeType: file.mimetype,
+            size: file.size,
+            relativePath: "/" + file.key,
+            awsPath: file.location,
+            etag: file.etag,
+            account: user._id,
+        }
+        logger.info(`Updating user banner file details for ${user.walletPublicAddress} address is: ${JSON.stringify(fileDetails)}`);
+        await userRepository.updateUserBanner(user._id, fileDetails);
+    } catch (err) {
+        throw err;
+    }
+}

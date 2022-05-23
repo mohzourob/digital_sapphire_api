@@ -68,14 +68,14 @@ export const authenticationWithSignature = async (req, res, next) => {
 
 
 export const updateBannerImage = async (req, res, next) => {
+    const { file, user } = req;
     try {
-
-        console.log(req.file)
-
-
+        logger.info(`Upadting banner image for ${user.walletPublicAddress} address`);
+        await userServices.updateUserBanner(user, file);
         res.status(200).send({})
-
+        logger.info(`Banner image updated successfully for ${user.walletPublicAddress} address`);
     } catch (err) {
+        logger.error(`Update banner image failed for ${user.walletPublicAddress} address.`)
         if (err.name === "HttpError") {
             next(err);
         }
