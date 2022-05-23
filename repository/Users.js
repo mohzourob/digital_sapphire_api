@@ -48,3 +48,15 @@ export const updateUserBanner = async (userId, file) => {
         throw err;
     }
 }
+
+
+export const updateUserCover = async (userId, file) => {
+    try {
+        const fileDetails = await AccountResource.create(file);
+        logger.info(`Added successfully file to resource account collection`)
+        await Profile.updateOne({ account: userId }, { coverImage: fileDetails._id });
+        logger.info(`Added successfully cover image to profile details`);
+    } catch (err) {
+        throw err;
+    }
+}

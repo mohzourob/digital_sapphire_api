@@ -84,3 +84,26 @@ export const updateUserBanner = async (user, file) => {
         throw err;
     }
 }
+
+
+export const updateUserCover = async (user, file) => {
+    try {
+        if (!file.mimetype.includes("image")) {
+            throw new HttpError(`Invalid file type`, 400);
+        }
+        const fileDetails = {
+            name: file.originalname,
+            encoding: file.encoding,
+            mimeType: file.mimetype,
+            size: file.size,
+            relativePath: "/" + file.key,
+            awsPath: file.location,
+            etag: file.etag,
+            account: user._id,
+        }
+        logger.info(`Updating user cover image file details for ${user.walletPublicAddress} address is: ${JSON.stringify(fileDetails)}`);
+        await userRepository.updateUserCover(user._id, fileDetails);
+    } catch (err) {
+        throw err;
+    }
+}

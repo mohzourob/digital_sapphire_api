@@ -25,7 +25,7 @@ router.post("/login", [
 ], authenticationWithSignature)
 
 router.put("/profile/banner", protect, uploader.single('banner'), updateBannerImage)
-router.put("/profile/cover", protect, updateCoverImage)
+router.put("/profile/cover", protect, uploader.single('cover'), updateCoverImage)
 router.put("/profile", protect, updateProfile)
 
 export default router;

@@ -70,6 +70,9 @@ export const authenticationWithSignature = async (req, res, next) => {
 export const updateBannerImage = async (req, res, next) => {
     const { file, user } = req;
     try {
+        if (!file) {
+            return next(new HttpError(`Invalid file type`, 400))
+        }
         logger.info(`Upadting banner image for ${user.walletPublicAddress} address`);
         await userServices.updateUserBanner(user, file);
         res.status(200).send({})
@@ -84,8 +87,16 @@ export const updateBannerImage = async (req, res, next) => {
 }
 
 export const updateCoverImage = async (req, res, next) => {
+    const { file, user } = req;
     try {
+        if (!file) {
+            return next(new HttpError(`Invalid file type`, 400))
+        }
 
+        logger.info(`Upadting cover image for ${user.walletPublicAddress} address`);
+        await userServices.updateUserCover(user, file);
+        res.status(200).send({})
+        logger.info(`Cover image updated successfully for ${user.walletPublicAddress} address`);
     } catch (err) {
         if (err.name === "HttpError") {
             next(err);
