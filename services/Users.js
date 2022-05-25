@@ -70,6 +70,17 @@ export const checkAuthenticationSignature = async (signature, walletPublicAddres
 }
 
 
+export const getUserProfile = async (accountId) => {
+    try {
+        const userProfile = await userRepository.getUserProfileByAccountId(accountId);
+
+        return userProfile;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 export const updateUserBanner = async (user, file) => {
     try {
         if (!file.mimetype.includes("image")) {

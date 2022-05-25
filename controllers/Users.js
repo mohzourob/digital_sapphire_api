@@ -154,3 +154,20 @@ export const updateProfile = async (req, res, next) => {
         return next(new HttpError(err, 500))
     }
 }
+
+
+export const getUserProfile = async (req, res, next) => {
+    const { user: { _id: accountId, walletPublicAddress } } = req;
+
+    try {
+        logger.info(`Getting profile for ${walletPublicAddress} address`);
+        const userProfile = await userServices.getUserProfile(accountId);
+        res.status(200).json(userProfile)
+        logger.info(`Profile fetched successfully for ${walletPublicAddress} address`);
+    } catch (err) {
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}

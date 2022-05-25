@@ -6,6 +6,7 @@ import {
     updateBannerImage,
     updateCoverImage,
     updateProfile,
+    getUserProfile
 } from "../controllers/Users.js";
 import {
     protect
@@ -14,6 +15,8 @@ import uploader from "../middleware/fileUploader.js"
 
 
 const router = Router();
+
+router.get("/profile", protect, getUserProfile)
 
 router.post("/nonceCode", [
     check("walletPublicAddress").isLength({ min: 42, max: 42 })
