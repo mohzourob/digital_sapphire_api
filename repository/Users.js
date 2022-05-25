@@ -15,6 +15,27 @@ export const getUser = async (filter) => {
     }
 }
 
+export const getUserProfileByAccountId = async (accountId) => {
+    try {
+        let profileDetails = await Account.findOne({ _id: accountId })
+            .select("walletPublicAddress _id")
+            .populate({
+                path: "profile",
+                select: "_id firstName lastName username email bio links",
+                populate: [{
+                    path: "bannerImage",
+                    select: "_id name  mimeType awsPath"
+                }, {
+                    path: "coverImage",
+                    select: "_id name  mimeType awsPath"
+                }]
+            })
+
+        return profileDetails;
+    } catch (err) {
+        throw err;
+    }
+}
 
 export const createUser = async (user) => {
     try {

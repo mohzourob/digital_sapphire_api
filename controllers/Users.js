@@ -51,12 +51,10 @@ export const authenticationWithSignature = async (req, res, next) => {
         }
 
         logger.info(`Starting authentication process for ${walletPublicAddress} address`);
-        const userToken = await userServices.checkAuthenticationSignature(signature, walletPublicAddress);
+        const result = await userServices.checkAuthenticationSignature(signature, walletPublicAddress);
 
         logger.info(`Token sent successfully for ${walletPublicAddress} address`);
-        res.status(200).json({
-            token: userToken
-        })
+        res.status(200).json(result)
     } catch (err) {
         logger.error(`Authentication process failed for ${walletPublicAddress} address.`)
         if (err.name === "HttpError") {

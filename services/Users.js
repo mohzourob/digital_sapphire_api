@@ -55,8 +55,15 @@ export const checkAuthenticationSignature = async (signature, walletPublicAddres
             algorithm: "HS256",
         })
 
+        // get user profile details
+        logger.info(`Get user profile details for ${walletPublicAddress} address`);
+        const userProfile = await userRepository.getUserProfileByAccountId(user._id);
+
         logger.info(`Token created successfully for ${walletPublicAddress} address`);
-        return userToken;
+        return {
+            token: userToken,
+            profile: userProfile
+        };
     } catch (err) {
         throw err;
     }
