@@ -60,3 +60,20 @@ export const updateUserCover = async (userId, file) => {
         throw err;
     }
 }
+
+
+export const updateUserProfileByAccountId = async (accountId, newData) => {
+    try {
+        await Profile.updateOne({ account: accountId }, newData);
+    } catch (err) {
+        if (err.message.includes("duplicate key error collection")) {
+            if (err.message.includes("email")) {
+                throw new HttpError(`Email already exists`, 400);
+            }
+            if (err.message.includes("username")) {
+                throw new HttpError(`Username already exists`, 400);
+            }
+        }
+        throw err;
+    }
+}

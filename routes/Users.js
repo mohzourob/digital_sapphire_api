@@ -26,6 +26,17 @@ router.post("/login", [
 
 router.put("/profile/banner", protect, uploader.single('banner'), updateBannerImage)
 router.put("/profile/cover", protect, uploader.single('cover'), updateCoverImage)
-router.put("/profile", protect, updateProfile)
+router.put("/profile/details", [
+    check("firstName").isLength({ min: 1 }).optional(),
+    check("lastName").isLength({ min: 1 }).optional(),
+    check("bio").isLength({ min: 1 }).optional(),
+    check("username").isLength({ min: 4 }).optional().withMessage("Username must be at least 4 characters long"),
+    check("email").isEmail().optional(),
+    check("facebook").isURL().optional(),
+    check("instagram").isURL().optional(),
+    check("twitter").isURL().optional(),
+    check("discord").isURL().optional(),
+    check("website").isURL().optional()
+], protect, updateProfile)
 
 export default router;

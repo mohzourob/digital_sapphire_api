@@ -107,3 +107,12 @@ export const updateUserCover = async (user, file) => {
         throw err;
     }
 }
+
+
+export const updateUserProfile = async (accountId, newData) => {
+    try {
+        await userRepository.updateUserProfileByAccountId(accountId, newData);
+    } catch (err) {
+        throw err;
+    }
+} 

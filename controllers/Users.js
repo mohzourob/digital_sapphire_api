@@ -106,8 +106,49 @@ export const updateCoverImage = async (req, res, next) => {
 }
 
 export const updateProfile = async (req, res, next) => {
-    try {
+    const { user: { _id: accountId, walletPublicAddress }, body: {
+        firstName,
+        lastName,
+        username,
+        email,
+        bio,
+        facebook,
+        instagram,
+        twiiter,
+        discord,
+        website
+    } } = req;
 
+
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
+        }
+
+        const updateData = { links: {} };
+
+        firstName && (updateData.firstName = firstName);
+        lastName && (updateData.lastName = lastName);
+        username && (updateData.username = username);
+        email && (updateData.email = email);
+        bio && (updateData.bio = bio);
+        facebook && (updateData.links.facebook = facebook);
+        instagram && (updateData.links.instagram = instagram);
+        twiiter && (updateData.links.twiiter = twiiter);
+        discord && (updateData.links.discord = discord);
+        website && (updateData.links.website = website);
+
+        console.log(updateData);
+
+        logger.info(`Upadting profile for ${walletPublicAddress} address with data: ${JSON.stringify(updateData)}`);
+        if (Object.keys(updateData).length > 0) {
+            console.log("here")
+            await userServices.updateUserProfile(accountId, updateData);
+        }
+
+        res.status(200).send({})
+        logger.info(`Profile updated successfully for ${walletPublicAddress} address`);
     } catch (err) {
         if (err.name === "HttpError") {
             next(err);
