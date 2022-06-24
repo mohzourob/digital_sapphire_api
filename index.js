@@ -16,6 +16,7 @@ import checkOrigin from "./middleware/cors.js";
 
 // import routes
 import Users from "./routes/Users.js"
+import NFTs from "./routes/NFTs.js"
 
 // import middlewaresdigdi
 import {
@@ -76,6 +77,7 @@ app.use(checkOrigin())
 
 // routes
 app.use("/api/v1/users", Users);
+app.use("/api/v1/nfts", NFTs);
 
 // routes not founds
 app.use(() => {
