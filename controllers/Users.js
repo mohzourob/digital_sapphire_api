@@ -137,11 +137,9 @@ export const updateProfile = async (req, res, next) => {
         discord && (updateData.links.discord = discord);
         website && (updateData.links.website = website);
 
-        console.log(updateData);
 
         logger.info(`Upadting profile for ${walletPublicAddress} address with data: ${JSON.stringify(updateData)}`);
         if (Object.keys(updateData).length > 0) {
-            console.log("here")
             await userServices.updateUserProfile(accountId, updateData);
         }
 

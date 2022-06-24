@@ -36,7 +36,6 @@ const multerS3Config = multerS3({
     s3: s3Config,
     bucket: process.env.AWS_CONFIG_BUCKET_NAME,
     metadata: function (req, file, cb) {
-        console.log(file, "config")
         cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
