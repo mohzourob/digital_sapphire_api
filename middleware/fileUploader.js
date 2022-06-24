@@ -66,9 +66,17 @@ export const ipfsMulter = multer({
 export const ipfsFileUploader = async (req, res, next) => {
     try {
         const file = req.file;
+        logger.info(`Starting upload file with details ${JSON.stringify({
+            originalname: '1621343890996-p1f5vpk4o814i11bguc8jh6gc364-0 (2).png',
+            encoding: '7bit',
+            mimetype: 'image/png',
+            size: 426930
+        })}`);
+
         if (!file) {
             return next(new HttpError(`Invalid file type`, 400))
         }
+        logger.info(`Uploading file to IPFS`);
         const ipfsClient = new ipfs({
             host: 'ipfs.infura.io',
             port: 5001,
@@ -83,6 +91,8 @@ export const ipfsFileUploader = async (req, res, next) => {
         const ipfsHash = await ipfsClient.add(fileBuffer);
         const ipfsHashString = ipfsHash[0].hash;
         req.ipfsHash = ipfsHashString;
+        logger.info(`File uploaded to IPFS with hash ${ipfsHashString}`);
+        logger.info(`Uploading file to AWS S3 bucket ${process.env.AWS_CONFIG_BUCKET_NAME}, with key: static/${req.user._id}-${req.user.walletPublicAddress}/${uuidv4()}-${file.originalname}`);
 
         const objectParams = {
             Bucket: process.env.AWS_CONFIG_BUCKET_NAME,
@@ -91,7 +101,7 @@ export const ipfsFileUploader = async (req, res, next) => {
         }
 
         const { ETag: etag } = await new AWS.S3({ apiVersion: '2020-06-01' }).putObject(objectParams).promise()
-
+        logger.info(`File uploaded to AWS S3 bucket ${process.env.AWS_CONFIG_BUCKET_NAME}, with key: static/${req.user._id}-${req.user.walletPublicAddress}/${uuidv4()}-${file.originalname} with etag: ${etag}`);
 
         req.file = {
             originalname: file.originalname,

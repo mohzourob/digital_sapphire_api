@@ -10,9 +10,9 @@ export const uploadNFTFile = async (req, res, next) => {
         if (!file) {
             return next(new HttpError(`Invalid file type`, 400))
         }
-
+        logger.info(`Saving NFT file details for ${user.walletPublicAddress} address`);
         const fileDeatils = await nftsServices.saveNFTFileDetails(file, user);
-
+        logger.info(`NFT file details saved for ${user.walletPublicAddress} address`);
         res.status(200).json({
             ...fileDeatils,
             ipfsURL: `https://ipfs.io/ipfs/${ipfsHash}`
