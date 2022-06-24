@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { v4 as uuidv4 } from "uuid";
-import ipfs from "ipfs-api";
+import ipfsClient from "../utils/ipfs.js";
 
 import {
     minFileTypes
@@ -77,19 +77,11 @@ export const ipfsFileUploader = async (req, res, next) => {
             return next(new HttpError(`Invalid file type`, 400))
         }
         logger.info(`Uploading file to IPFS`);
-        const ipfsClient = new ipfs({
-            host: 'ipfs.infura.io',
-            port: 5001,
-            protocol: 'https',
-            headers: {
-                // authorization: 'Bearer ' + "6a5fd39831c349fcd4524899cd0efa16"
-            },
-            apiPath: "/api/v0"
-        });
+
 
         const fileBuffer = await file.buffer;
         const ipfsHash = await ipfsClient.add(fileBuffer);
-        const ipfsHashString = ipfsHash[0].hash;
+        const ipfsHashString = ipfsHash.path;
         req.ipfsHash = ipfsHashString;
         logger.info(`File uploaded to IPFS with hash ${ipfsHashString}`);
         logger.info(`Uploading file to AWS S3 bucket ${process.env.AWS_CONFIG_BUCKET_NAME}, with key: static/${req.user._id}-${req.user.walletPublicAddress}/${uuidv4()}-${file.originalname}`);
