@@ -44,3 +44,12 @@ export const uploadMetaDataToIPFS = async (title, description, ipfsURL) => {
         throw err;
     }
 }
+
+
+export const createNFTItem = async (userId, nftDetails) => {
+    try {
+        await nftsRepository.createNFTItem({ owner: userId, ...nftDetails });
+    } catch (err) {
+        throw err;
+    }
+}

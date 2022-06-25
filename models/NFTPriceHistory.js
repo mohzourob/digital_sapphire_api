@@ -6,12 +6,23 @@ const NFTPriceHistorySchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'NFTItems',
         require: true
-    }
+    },
+    priceHistory: [{
+        price: {
+            type: Number
+        },
+        currency: {
+            type: String
+        },
+        date: {
+            type: Date
+        }
+    }]
 }, {
     timestamps: true
 }, {
-    collection: 'NFTActivity'
+    collection: 'NFTPriceHistory'
 })
 
 
-export default mongoose.model("NFTItem", NFTPriceHistorySchema);
+export default mongoose.model("NFTPriceHistories", NFTPriceHistorySchema);

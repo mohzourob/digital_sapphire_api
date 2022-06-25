@@ -53,3 +53,66 @@ export const uploadMetaDataToIPFS = async (req, res, next) => {
         return next(new HttpError(err, 500))
     }
 }
+
+export const createNFTItem = async (req, res, next) => {
+    const {
+        body: {
+            name,
+            description,
+            file,
+            price,
+            currency,
+            exteraLinks,
+            network,
+            metaDataURL,
+            metaDataProvider,
+            metaDataStoreType
+        },
+        user: { _id: userId }
+    } = req;
+
+
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
+        }
+
+        logger.info(`Start create nft item with details: ${JSON.stringify({
+            name,
+            description,
+            file,
+            price,
+            currency,
+            exteraLinks,
+            network,
+            metaDataURL,
+            metaDataProvider,
+            metaDataStoreType
+        })}`)
+
+
+        const nftDetails = {};
+
+        name && (nftDetails.name = name);
+        description && (nftDetails.description = description);
+        file && (nftDetails.file = file);
+        price && (nftDetails.price = price);
+        currency && (nftDetails.currency = currency);
+        exteraLinks && (nftDetails.exteraLinks = exteraLinks);
+        network && (nftDetails.network = network);
+        metaDataURL && (nftDetails.metaDataURL = metaDataURL);
+        metaDataProvider && (nftDetails.metaDataProvider = metaDataProvider);
+        metaDataStoreType && (nftDetails.metaDataStoreType = metaDataStoreType);
+
+        await nftsServices.createNFTItem(userId, nftDetails);
+        logger.info(`Create nft item successfully.`)
+        res.status(200).send({});
+    } catch (err) {
+        logger.info(`Create nft item failed.`)
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}

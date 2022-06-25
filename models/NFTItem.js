@@ -20,21 +20,28 @@ const NFTItemSchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    exteraLink: {
+    currency: {
+        type: String,
+        required: true,
+        enum: ["ETH"],
+        default: "ETH"
+    },
+    exteraLinks: [{
         type: String,
         trim: true,
-    },
+    }],
     network: {
         type: String,
         trim: true,
         required: true,
+        enum: ["Ethereum", "Polygon"]
     },
     numberOfViews: {
         type: Number,
         default: 0
     },
     numberOfLikes: {
-        type: number,
+        type: Number,
         default: 0
     },
     viewList: [
@@ -59,7 +66,8 @@ const NFTItemSchema = new mongoose.Schema({
     metaDataProvider: {
         type: String,
         trim: true,
-        default: "IPFS"
+        default: "IPFS",
+        enum: ["IPFS", "Torrent", "S3"]
     },
     metaDataStoreType: {
         type: String,

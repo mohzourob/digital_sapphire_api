@@ -14,4 +14,4 @@ const NFTActivitySchema = new mongoose.Schema({
 })
 
 
-export default mongoose.model("NFTActivity", NFTActivitySchema);
+export default mongoose.model("NFTActivities", NFTActivitySchema);
