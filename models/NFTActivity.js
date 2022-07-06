@@ -6,7 +6,32 @@ const NFTActivitySchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'NFTItems',
         require: true
-    }
+    },
+    activities: [{
+        event: {
+            type: String,
+            enum: ["List", "Sale", "Unlist", "Transfer", "Delete", "Create"],
+            require: true
+        },
+        price: {
+            type: Number
+        },
+        currency: {
+            type: String,
+        },
+        from: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Account',
+        },
+        to: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Account',
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 }, {
     timestamps: true
 }, {

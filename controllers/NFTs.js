@@ -116,3 +116,16 @@ export const createNFTItem = async (req, res, next) => {
         return next(new HttpError(err, 500))
     }
 }
+
+
+export const updatePrice = async (req, res, next) => {
+    try {
+
+    } catch (err) {
+        logger.info(`Create nft item failed.`)
+        if (err.name === "HttpError") {
+            next(err);
+        }
+        return next(new HttpError(err, 500))
+    }
+}

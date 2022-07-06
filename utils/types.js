@@ -18,6 +18,7 @@ export const minFileTypes = [
     'image/gif',
     'image/bmp',
     'image/svg+xml',
+    'image/webp',
     'audio/mpeg',
     'audio/mp3',
     'video/mp4',

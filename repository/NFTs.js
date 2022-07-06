@@ -48,6 +48,27 @@ export const createNFTItem = async (nftDetails) => {
         const nftActivity = await NFTActivity.create({
             item: nftItem._id
         })
+
+        await activities.activities.push({
+            event: "Create",
+            price: nftDetails.price,
+            currency: nftDetails.currency,
+            from: nftDetails.owner,
+            to: null
+        })
+
+        if (nftDetails.price) {
+            await activities.activities.push({
+                event: "List",
+                price: nftDetails.price,
+                currency: nftDetails.currency,
+                from: nftDetails.owner,
+                to: null
+            })
+        }
+
+        await activities.save();
+
         logger.info(`Created nft activity.`)
 
         nftItem.activity = nftActivity._id;
@@ -55,4 +76,6 @@ export const createNFTItem = async (nftDetails) => {
     } catch (err) {
         throw err;
     }
-} 
+}
+
+

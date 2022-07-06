@@ -53,3 +53,4 @@ export const createNFTItem = async (userId, nftDetails) => {
         throw err;
     }
 }
+

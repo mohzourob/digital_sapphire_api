@@ -84,6 +84,10 @@ const NFTItemSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'NFTPriceHistory',
         default: null
+    },
+    status: {
+        type: String,
+        enum: ["List", "Sale", "Unlist", "Transfer", "Delete"],
     }
 }, {
     timestamps: true
