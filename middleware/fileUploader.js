@@ -8,6 +8,8 @@ import {
     minFileTypes
 } from "../utils/types.js";
 import logger from "../utils/logger.js";
+import HttpError from "../models/HttpError.js";
+
 
 AWS.config.update({
     region: process.env.AWS_CONFIG_REGION,
