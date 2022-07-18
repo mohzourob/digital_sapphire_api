@@ -77,12 +77,12 @@ const NFTItemSchema = new mongoose.Schema({
     },
     activity: {
         type: mongoose.Schema.ObjectId,
-        ref: 'NFTActivity',
+        ref: 'NFTActivities',
         default: null
     },
     priceHistory: {
         type: mongoose.Schema.ObjectId,
-        ref: 'NFTPriceHistory',
+        ref: 'NFTPriceHistories',
         default: null
     },
     status: {

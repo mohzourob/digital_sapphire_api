@@ -54,3 +54,15 @@ export const createNFTItem = async (userId, nftDetails) => {
     }
 }
 
+
+export const updatePrice = async (userId, itemId, price) => {
+    try {
+        if (price <= 0) {
+            throw new HttpError(`Price must be greater than 0`, 400);
+        }
+
+        await nftsRepository.updatePrice(userId, itemId, price);
+    } catch (err) {
+        throw err;
+    }
+}

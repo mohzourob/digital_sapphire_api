@@ -43,28 +43,32 @@ export const createNFTItem = async (nftDetails) => {
         }
 
         nftItem.priceHistory = priceHistory._id;
-        await nftItem.save();
 
+        await nftItem.save();
         const nftActivity = await NFTActivity.create({
             item: nftItem._id
         })
 
-        await nftActivity.activities.push({
+        await nftActivity.activities.unshift({
             event: "Create",
             price: nftDetails.price,
             currency: nftDetails.currency,
             from: nftDetails.owner,
             to: null
         })
+        nftItem.status = "Unlist";
+
 
         if (nftDetails.price) {
-            await nftActivity.activities.push({
+            await nftActivity.activities.unshift({
                 event: "List",
                 price: nftDetails.price,
                 currency: nftDetails.currency,
                 from: nftDetails.owner,
                 to: null
             })
+
+            nftItem.status = "List";
         }
 
         await nftActivity.save();
@@ -79,3 +83,61 @@ export const createNFTItem = async (nftDetails) => {
 }
 
 
+
+// activity unlisted in last price and listed in new price
+export const updatePrice = async (userId, itemId, price) => {
+    try {
+        const nftItem = await NFT.findById(itemId)
+            .populate("priceHistory")
+            .populate("activity");
+
+        if (!nftItem) {
+            throw new HttpError(`NFT item not found.`, 404);
+        }
+
+        if (nftItem.owner.toString() !== userId.toString()) {
+            throw new HttpError(`You are not owner of this nft item.`, 403);
+        }
+
+        if (nftItem.price === price) {
+            throw new HttpError(`Price is same as last price.`, 400);
+        }
+
+        if (nftItem.status !== "List") {
+            throw new HttpError(`NFT item is unlist.`, 400);
+        }
+
+        // edit item activity
+        nftItem.activity.activities.unshift({
+            event: "Unlist",
+            price: nftItem.price,
+            currency: nftItem.currency,
+            from: null,
+            to: null
+        })
+
+        nftItem.activity.activities.unshift({
+            event: "List",
+            price: price,
+            currency: nftItem.currency,
+            from: null,
+            to: null
+        })
+
+        // edit item price history
+        nftItem.priceHistory.priceHistory.unshift({
+            price: price,
+            currency: nftItem.currency,
+        })
+
+
+        // edit item price
+        nftItem.price = price;
+
+        await nftItem.save();
+        await nftItem.activity.save();
+        await nftItem.priceHistory.save();
+    } catch (err) {
+        throw err;
+    }
+}

@@ -118,9 +118,28 @@ export const createNFTItem = async (req, res, next) => {
 }
 
 
-export const updatePrice = async (req, res, next) => {
-    try {
+// list item no price zero 
 
+// un list item will saved with last price in price history
+
+// update price no 0 price
+export const updatePrice = async (req, res, next) => {
+    const {
+        body: {
+            itemId,
+            price
+        },
+        user: { _id: userId }
+    } = req;
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
+        }
+        logger.info(`Start update price with details: ${JSON.stringify({ itemId, price })}`)
+        await nftsServices.updatePrice(userId, itemId, price);
+        logger.info(`Update price successfully.`)
+        res.status(200).send({});
     } catch (err) {
         logger.info(`Create nft item failed.`)
         if (err.name === "HttpError") {

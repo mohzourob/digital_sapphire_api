@@ -7,7 +7,8 @@ import { ipfsFileUploader, ipfsMulter } from "../middleware/fileUploader.js";
 import {
     uploadNFTFile,
     uploadMetaDataToIPFS,
-    createNFTItem
+    createNFTItem,
+    updatePrice
 } from "../controllers/NFTs.js";
 
 
@@ -32,6 +33,10 @@ router.post("/create", protect, [
     check("metaDataURL").isURL(),
     check("metaDataProvider").isString().notEmpty().isIn(["IPFS", "Torrent", "S3"]).optional(),
     check("metaDataStoreType").isString().notEmpty().isIn(["DECENTRALIZED", "CENTRALIZED"]).optional()
-], createNFTItem)
+], createNFTItem);
+router.put("/price", protect, [
+    check("price").isNumeric(),
+    check("itemId").isMongoId()
+], updatePrice)
 
 export default router;
