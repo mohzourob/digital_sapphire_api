@@ -8,7 +8,9 @@ import {
     uploadNFTFile,
     uploadMetaDataToIPFS,
     createNFTItem,
-    updatePrice
+    updatePrice,
+    listItem,
+    unListItem
 } from "../controllers/NFTs.js";
 
 
@@ -38,5 +40,12 @@ router.put("/price", protect, [
     check("price").isNumeric(),
     check("itemId").isMongoId()
 ], updatePrice)
+router.put("/list", protect, [
+    check("price").isNumeric(),
+    check("itemId").isMongoId()
+], listItem)
+router.put("/unlist", protect, [
+    check("itemId").isMongoId()
+], unListItem)
 
 export default router;
