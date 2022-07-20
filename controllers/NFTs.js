@@ -132,9 +132,9 @@ export const listItem = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
         }
-        logger.info(`Start update price with details: ${JSON.stringify({ itemId, price })}`)
+        logger.info(`Start list item with details: ${JSON.stringify({ itemId, price })}`)
         await nftsServices.listItem(userId, itemId, price);
-        logger.info(`Update price successfully.`)
+        logger.info(`List item success.`)
         res.status(200).send({});
     } catch (err) {
         logger.info(`Create nft item failed.`)
@@ -158,9 +158,9 @@ export const unListItem = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return next(new HttpError(`${errors.errors[0].param}: ${errors.errors[0].msg}`, 400))
         }
-        logger.info(`Start update price with details: ${JSON.stringify({ itemId })}`)
+        logger.info(`Start un list item with details: ${JSON.stringify({ itemId })}`)
         await nftsServices.unListItem(userId, itemId);
-        logger.info(`Update price successfully.`)
+        logger.info(`Un list item success.`)
         res.status(200).send({});
     } catch (err) {
         logger.info(`Create nft item failed.`)

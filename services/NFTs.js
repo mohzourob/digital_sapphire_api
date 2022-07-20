@@ -66,3 +66,25 @@ export const updatePrice = async (userId, itemId, price) => {
         throw err;
     }
 }
+
+
+export const listItem = async (userId, itemId, price) => {
+    try {
+        if (price <= 0) {
+            throw new HttpError(`Price must be greater than 0`, 400);
+        }
+
+        await nftsRepository.listItem(userId, itemId, price);
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+export const unListItem = async (userId, itemId) => {
+    try {
+        await nftsRepository.unListItem(userId, itemId);
+    } catch (err) {
+        throw err;
+    }
+}
