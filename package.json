@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "env-cmd -f .env.staging nodemon server.js",
     "start:development": "env-cmd -f .env.development nodemon server.js",
-    "start:production": "env-cmd -f .env nodemon server.js"
+    "start:production": "env-cmd -f .env nodemon server.js",
+    "push:heroku": "git push && git push heroku main"
   },
   "author": "dash7ou",
   "license": "ISC",
